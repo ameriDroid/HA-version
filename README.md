@@ -16,8 +16,8 @@ The JSON files are modified to replace:
 ## Usage
 
 The modified JSON files are available at:
-- Stable: https://ameridroid.github.io/HA-operating-system/stable.json
-- Beta: https://ameridroid.github.io/HA-operating-system/beta.json
+- Stable: https://ameridroid.github.io/HA-version/stable.json
+- Beta: https://ameridroid.github.io/HA-version/beta.json
 
 ## License
 
