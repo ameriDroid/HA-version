@@ -14,31 +14,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download JSON files
+      - name: Create temp directory and download files
         run: |
+          mkdir -p /tmp/ha-files
+          cd /tmp/ha-files
           curl -o stable.json https://version.home-assistant.io/stable.json
           curl -o beta.json https://version.home-assistant.io/beta.json
-
-      - name: Update URLs in JSON files
-        run: |
-          sed -i 's|https://os-artifacts.home-assistant.io/|https://github.com/ameriDroid/HA-operating-system/releases/download/|g' stable.json
-          sed -i 's|https://os-artifacts.home-assistant.io/|https://github.com/ameriDroid/HA-operating-system/releases/download/|g' beta.json
-
-      - name: Copy index.html
-        run: cp index.html /tmp/index.html
+          sed -i 's|https://os-artifacts.home-assistant.io/|https://github.com/ameriDroid/HA-operating-system/releases/download/|g' stable.json beta.json
 
       - name: Setup git config
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "<>"
 
-      - name: Switch to gh-pages
+      - name: Switch to gh-pages and update
         run: |
           git fetch origin gh-pages
           git checkout gh-pages || git checkout -b gh-pages
-          cp /tmp/index.html index.html
-          cp stable.json stable.json
-          cp beta.json beta.json
-          git add index.html stable.json beta.json
+          git rm -rf .
+          cp /tmp/ha-files/* .
+          cp $GITHUB_WORKSPACE/index.html .
+          git add .
           git commit -m "Update JSON files"
           git push origin gh-pages --force 
