@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Download JSON files
         run: |
@@ -32,10 +34,11 @@ jobs:
 
       - name: Switch to gh-pages
         run: |
-          git checkout gh-pages
+          git fetch origin gh-pages
+          git checkout gh-pages || git checkout -b gh-pages
           cp /tmp/index.html index.html
           cp stable.json stable.json
           cp beta.json beta.json
           git add index.html stable.json beta.json
           git commit -m "Update JSON files"
-          git push origin gh-pages --force
+          git push origin gh-pages --force 
