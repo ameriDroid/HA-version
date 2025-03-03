@@ -6,14 +6,8 @@ on:
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
-  build-and-deploy:
+  update-json:
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -28,15 +22,20 @@ jobs:
           sed -i 's|https://os-artifacts.home-assistant.io/|https://github.com/ameriDroid/HA-operating-system/releases/download/|g' stable.json
           sed -i 's|https://os-artifacts.home-assistant.io/|https://github.com/ameriDroid/HA-operating-system/releases/download/|g' beta.json
 
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./
-          destination: ./_site
+      - name: Copy index.html
+        run: cp index.html /tmp/index.html
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Setup git config
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "<>"
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Switch to gh-pages
+        run: |
+          git checkout gh-pages
+          cp /tmp/index.html index.html
+          cp stable.json stable.json
+          cp beta.json beta.json
+          git add index.html stable.json beta.json
+          git commit -m "Update JSON files"
+          git push origin gh-pages --force
