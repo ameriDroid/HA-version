@@ -20,11 +20,12 @@ jobs:
           cd /tmp/ha-files
           curl -o stable.json https://version.home-assistant.io/stable.json
           curl -o beta.json https://version.home-assistant.io/beta.json
+          curl -o dev.json https://version.home-assistant.io/dev.json
           sed -i \
             -e 's|https://os-artifacts.home-assistant.io/|https://github.com/ameriDroid/HA-operating-system/releases/download/|g' \
             -e 's|"supervisor": "homeassistant/|"supervisor": "ameridroid/|g' \
             -e 's|"supervisor": "ghcr.io/home-assistant|"supervisor": "ghcr.io/ameridroid|g' \
-            stable.json beta.json
+            stable.json beta.json dev.json
 
       - name: Setup git config
         run: |
@@ -35,7 +36,7 @@ jobs:
         run: |
           git fetch origin gh-pages
           git checkout gh-pages || git checkout -b gh-pages
-          git rm -rf stable.json beta.json
+          git rm -rf stable.json beta.json dev.json
           cp /tmp/ha-files/* .
           git add .
           git commit -m "Update JSON files"

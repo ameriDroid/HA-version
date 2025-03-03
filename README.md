@@ -7,17 +7,19 @@ This repository maintains modified mirrors of Home Assistant's version JSON file
 This repository automatically fetches and modifies the following Home Assistant version files:
 - `stable.json` from `version.home-assistant.io/stable.json`
 - `beta.json` from `version.home-assistant.io/beta.json`
+- `dev.json` from `version.home-assistant.io/dev.json`
 
 The JSON files are modified to replace:
-- `https://os-artifacts.home-assistant.io/` 
-- with `https://github.com/ameriDroid/HA-operating-system/releases/download/`
-
+- `https://os-artifacts.home-assistant.io/` with `https://github.com/ameriDroid/HA-operating-system/releases/download/`
+- `"supervisor": "homeassistant/` with `"supervisor": "ameridroid/`
+- `"supervisor": "ghcr.io/home-assistant` with `"supervisor": "ghcr.io/ameridroid`
 
 ## Usage
 
 The modified JSON files are available at:
 - Stable: https://ameridroid.github.io/HA-version/stable.json
 - Beta: https://ameridroid.github.io/HA-version/beta.json
+- Dev: https://ameridroid.github.io/HA-version/dev.json
 
 ## License
 
