@@ -1,0 +1,31 @@
+name: Update JSON Files
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Run every 6 hours
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download JSON files
+        run: |
+          curl -o stable.json https://version.home-assistant.io/stable.json
+          curl -o beta.json https://version.home-assistant.io/beta.json
+
+      - name: Update URLs in JSON files
+        run: |
+          sed -i 's|https://os-artifacts.home-assistant.io/|https://github.com/ameriDroid/HA-operating-system/releases/download/|g' stable.json
+          sed -i 's|https://os-artifacts.home-assistant.io/|https://github.com/ameriDroid/HA-operating-system/releases/download/|g' beta.json
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          keep_files: false
+          enable_jekyll: false
