@@ -6,8 +6,14 @@ on:
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
-  update-json:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,10 +28,15 @@ jobs:
           sed -i 's|https://os-artifacts.home-assistant.io/|https://github.com/ameriDroid/HA-operating-system/releases/download/|g' stable.json
           sed -i 's|https://os-artifacts.home-assistant.io/|https://github.com/ameriDroid/HA-operating-system/releases/download/|g' beta.json
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
-          keep_files: false
-          enable_jekyll: false
+          source: ./
+          destination: ./_site
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
