@@ -6,9 +6,9 @@ This repository maintains version information JSON files for Home Assistant comp
 
 The following JSON files are available:
 
-- **Stable**: [`https://ameridroid.github.io/ha-version/stable.json`](https://ameridroid.github.io/ha-version/stable.json)
-- **Beta**: [`https://ameridroid.github.io/ha-version/beta.json`](https://ameridroid.github.io/ha-version/beta.json)
-- **Dev**: [`https://ameridroid.github.io/ha-version/dev.json`](https://ameridroid.github.io/ha-version/dev.json)
+- **Stable**: [`https://ameridroid.github.io/HA-version/stable.json`](https://ameridroid.github.io/HA-version/stable.json)
+- **Beta**: [`https://ameridroid.github.io/HA-version/beta.json`](https://ameridroid.github.io/HA-version/beta.json)
+- **Dev**: [`https://ameridroid.github.io/HA-version/dev.json`](https://ameridroid.github.io/HA-version/dev.json)
 
 
 ## Version Sources
