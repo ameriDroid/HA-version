@@ -1,41 +1,54 @@
-name: Update JSON Files
+name: Update Version JSON Files
 
 on:
-  workflow_dispatch:  # Allow manual trigger
+  schedule:
+    - cron: '0 */6 * * *'  # Runs every 6 hours
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
-  update-json:
+  update-json-files:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Create temp directory and download files
-        run: |
-          mkdir -p /tmp/ha-files
-          cd /tmp/ha-files
-          curl -o stable.json https://version.home-assistant.io/stable.json
-          curl -o beta.json https://version.home-assistant.io/beta.json
-          curl -o dev.json https://version.home-assistant.io/dev.json
-          sed -i \
-            -e 's|https://os-artifacts.home-assistant.io/|https://github.com/ameriDroid/HA-operating-system/releases/download/|g' \
-            -e 's|"supervisor": "homeassistant/|"supervisor": "ameridroid/|g' \
-            -e 's|"supervisor": "ghcr.io/home-assistant|"supervisor": "ghcr.io/ameridroid|g' \
-            stable.json beta.json dev.json
-
-      - name: Setup git config
-        run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "<>"
-
-      - name: Switch to gh-pages and update
-        run: |
-          git fetch origin gh-pages
-          git checkout gh-pages || git checkout -b gh-pages
-          git rm -rf stable.json beta.json dev.json || true
-          cp /tmp/ha-files/* .
-          git add .
-          git commit -m "Update JSON files" || true
-          git push origin gh-pages --force || true
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0  # Fetch all history for all branches
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+    
+    - name: Update JSON files
+      run: python update_json.py
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Setup git config
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+    
+    - name: Deploy to gh-pages
+      run: |
+        # Create temp directory and copy JSON files
+        mkdir -p /tmp/json-files
+        cp *.json /tmp/json-files/
+        
+        # Switch to gh-pages branch
+        git fetch origin gh-pages
+        git checkout gh-pages || git checkout -b gh-pages
+        
+        # Remove old JSON files and copy new ones
+        rm -f *.json
+        cp /tmp/json-files/*.json .
+        
+        # Commit and push changes
+        git add *.json
+        git commit -m "Update version JSON files" || echo "No changes to commit"
+        git push origin gh-pages --force

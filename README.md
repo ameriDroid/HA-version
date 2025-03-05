@@ -1,30 +1,41 @@
-# Home Assistant Version JSON Mirror
+# Home Assistant Version JSON Files
 
-This repository maintains modified mirrors of Home Assistant's version JSON files, with custom download URLs for the indiedroid Nova's OS artifacts.
+This repository maintains version information JSON files for Home Assistant components, customized for ameriDroid's builds. The files are automatically updated every 6 hours and published to GitHub Pages.
 
-## Description
+## JSON Files
 
-This repository automatically fetches and modifies the following Home Assistant version files:
-- `stable.json` from `version.home-assistant.io/stable.json`
-- `beta.json` from `version.home-assistant.io/beta.json`
-- `dev.json` from `version.home-assistant.io/dev.json`
+The following JSON files are available:
 
-The JSON files are modified to replace:
-- `https://os-artifacts.home-assistant.io/` with `https://github.com/ameriDroid/HA-operating-system/releases/download/`
-- `"supervisor": "homeassistant/` with `"supervisor": "ameridroid/`
-- `"supervisor": "ghcr.io/home-assistant` with `"supervisor": "ghcr.io/ameridroid`
+- **Stable**: [`https://ameridroid.github.io/ha-version/stable.json`](https://ameridroid.github.io/ha-version/stable.json)
+- **Beta**: [`https://ameridroid.github.io/ha-version/beta.json`](https://ameridroid.github.io/ha-version/beta.json)
+- **Dev**: [`https://ameridroid.github.io/ha-version/dev.json`](https://ameridroid.github.io/ha-version/dev.json)
 
-## Usage
 
-The modified JSON files are available at:
-- Stable: https://ameridroid.github.io/HA-version/stable.json
-- Beta: https://ameridroid.github.io/HA-version/beta.json
-- Dev: https://ameridroid.github.io/HA-version/dev.json
+## Version Sources
 
-## License
+- **Home Assistant**: Versions are sourced from the official Home Assistant version JSONs
+- **Supervisor**: Latest releases from [ameriDroid/supervisor](https://github.com/ameriDroid/supervisor)
+- **Operating System**: Latest releases from [ameriDroid/HA-operating-system](https://github.com/ameriDroid/HA-operating-system)
 
-This repository only contains modified copies of Home Assistant's version files. All rights belong to their respective owners.
+## Automatic Updates
 
-## Contributing
+The JSON files are automatically updated every 6 hours via GitHub Actions. The workflow:
 
-If you find any issues or have suggestions for improvements, please open an issue or submit a pull request. 
+1. Fetches the latest versions from all sources
+2. Generates new JSON files
+3. Publishes them to the gh-pages branch
+4. Makes them available via GitHub Pages
+
+## Development
+
+To update the JSON files locally:
+
+1. Install Python dependencies:
+```bash
+pip install requests
+```
+
+2. Run the update script:
+```bash
+python update_json.py
+```
