@@ -52,28 +52,26 @@ def get_supervisor_versions():
     """Get latest supervisor versions from GitHub releases"""
     releases = fetch_github_releases("supervisor")
     stable_version = None
-    beta_version = None
-    dev_version = None
+    latest_version = None  # This will be used for beta/dev
     
     for release in releases:
         version = release["tag_name"]
+        
+        # Get the very first version as latest (for beta/dev)
+        if not latest_version:
+            latest_version = version
         
         # For stable, get the first non-prerelease
         if not release["prerelease"] and not stable_version:
             stable_version = version
             
-        # For beta/dev, get the first prerelease
-        if release["prerelease"] and not beta_version:
-            beta_version = version
-            dev_version = version
-            
-        if stable_version and beta_version:
+        if stable_version and latest_version:
             break
             
     return {
         "stable": stable_version,
-        "beta": beta_version,
-        "dev": dev_version
+        "beta": latest_version,  # Use latest version for beta
+        "dev": latest_version   # Use latest version for dev
     }
 
 def generate_json(channel):
