@@ -134,11 +134,34 @@ def save_json(data, channel):
     with open(filename, 'w') as f:
         json.dump(data, f, indent=2)
 
+def fetch_apparmor_txt():
+    """Fetch the apparmor.txt file from Home Assistant"""
+    url = "https://version.home-assistant.io/apparmor.txt"
+    response = requests.get(url)
+    return response.text
+
+def save_apparmor_files(content):
+    """Save the apparmor content to various files"""
+    # Save the main apparmor.txt
+    with open("apparmor.txt", 'w') as f:
+        f.write(content)
+    
+    # Save channel-specific versions
+    for channel in ["stable", "beta", "dev"]:
+        with open(f"apparmor_{channel}.txt", 'w') as f:
+            f.write(content)
+
 if __name__ == "__main__":
     try:
+        # Generate and save JSON files
         for channel in ["stable", "beta", "dev"]:
             json_data = generate_json(channel)
             save_json(json_data, channel)
             print(f"Successfully generated {channel}.json")
+        
+        # Fetch and save apparmor files
+        apparmor_content = fetch_apparmor_txt()
+        save_apparmor_files(apparmor_content)
+        print("Successfully updated apparmor text files")
     except Exception as e:
-        print(f"Error generating JSON files: {str(e)}") 
+        print(f"Error generating files: {str(e)}") 

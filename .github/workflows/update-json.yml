@@ -1,4 +1,4 @@
-name: Update Version JSON Files
+name: Update Version Files
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:  # Allows manual trigger
 
 jobs:
-  update-json-files:
+  update-files:
     runs-on: ubuntu-latest
     
     steps:
@@ -24,7 +24,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests
     
-    - name: Update JSON files
+    - name: Update files
       run: python update_json.py
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -36,19 +36,21 @@ jobs:
     
     - name: Deploy to gh-pages
       run: |
-        # Create temp directory and copy JSON files
-        mkdir -p /tmp/json-files
-        cp *.json /tmp/json-files/
+        # Create temp directory and copy files
+        mkdir -p /tmp/version-files
+        cp *.json /tmp/version-files/
+        cp apparmor*.txt /tmp/version-files/
         
         # Switch to gh-pages branch
         git fetch origin gh-pages
         git checkout gh-pages || git checkout -b gh-pages
         
-        # Remove old JSON files and copy new ones
-        rm -f *.json
-        cp /tmp/json-files/*.json .
+        # Remove old files and copy new ones
+        rm -f *.json apparmor*.txt
+        cp /tmp/version-files/*.json .
+        cp /tmp/version-files/apparmor*.txt .
         
         # Commit and push changes
-        git add *.json
-        git commit -m "Update version JSON files" || echo "No changes to commit"
+        git add *.json apparmor*.txt
+        git commit -m "Update version files" || echo "No changes to commit"
         git push origin gh-pages --force
