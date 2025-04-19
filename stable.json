@@ -1,0 +1,45 @@
+{
+  "channel": "stable",
+  "supervisor": "2025.03.4",
+  "homeassistant": {
+    "qemuarm-64": "2025.4.3"
+  },
+  "hassos": {
+    "nova": "14.2"
+  },
+  "hassos-upgrade": {
+    "11": "11.5",
+    "10": "10.5",
+    "9": "9.5",
+    "8": "8.5",
+    "7": "7.6",
+    "6": "6.6",
+    "5": "5.13",
+    "4": "4.20",
+    "3": "3.13"
+  },
+  "ota": "https://github.com/ameriDroid/HA-operating-system/releases/download/{version}/{os_name}_{board}-{version}.raucb",
+  "cli": "2025.04.0",
+  "dns": "2025.02.0",
+  "audio": "2025.02.0",
+  "multicast": "2025.02.0",
+  "observer": "2025.02.0",
+  "image": {
+    "core": "ghcr.io/home-assistant/{machine}-homeassistant",
+    "supervisor": "ghcr.io/ameridroid/{arch}-hassio-supervisor",
+    "cli": "ghcr.io/home-assistant/{arch}-hassio-cli",
+    "audio": "ghcr.io/home-assistant/{arch}-hassio-audio",
+    "dns": "ghcr.io/home-assistant/{arch}-hassio-dns",
+    "observer": "ghcr.io/home-assistant/{arch}-hassio-observer",
+    "multicast": "ghcr.io/home-assistant/{arch}-hassio-multicast"
+  },
+  "images": {
+    "core": "ghcr.io/home-assistant/{machine}-homeassistant",
+    "supervisor": "ghcr.io/ameridroid/{arch}-hassio-supervisor",
+    "cli": "ghcr.io/home-assistant/{arch}-hassio-cli",
+    "audio": "ghcr.io/home-assistant/{arch}-hassio-audio",
+    "dns": "ghcr.io/home-assistant/{arch}-hassio-dns",
+    "observer": "ghcr.io/home-assistant/{arch}-hassio-observer",
+    "multicast": "ghcr.io/home-assistant/{arch}-hassio-multicast"
+  }
+}
